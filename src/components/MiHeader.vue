@@ -31,7 +31,7 @@
 
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import { usePageStore } from '@/stores/page.js'
+import { usePageStore } from '@/stores/index'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -48,7 +48,7 @@ const emit = defineEmits(['click'])
 // 初始化一个状态数组，根据状态改变连接的选中样式
 let avtiveLink = ref(0)
 
-const linkSelect = index => {
+const linkSelect = (index) => {
   pageStore.pageIndex = index //点击的时候把pinia中存储的状态也更改
   avtiveLink.value = index //更改当前的选中索引
   // console.log('索引',index);

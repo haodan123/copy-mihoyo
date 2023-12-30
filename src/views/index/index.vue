@@ -20,6 +20,8 @@
         <News></News>
       </template>
     </MiLayout>
+    <!-- 视频组件 -->
+    <MiMaskVideo></MiMaskVideo>
   </div>
 </template>
 
@@ -31,10 +33,11 @@ import Hero from '@/views/Hero/index.vue'
 import Join from '@/views/Join/index.vue'
 import News from '@/views/News/index.vue'
 import Product from '@/views/Product/index.vue'
+import MiMaskVideo from '@/components/MiMaskVideo.vue'
 import { onMounted, ref, watch } from 'vue'
 import { getHeaderLinks, getMihoyoData } from '@/assets/js/api'
 import { useRouter, useRoute } from 'vue-router'
-import { usePageStore } from '@/stores/page'
+import { usePageStore } from '@/stores/index'
 const router = useRouter()
 const route = useRoute()
 const pageStore = usePageStore()
@@ -55,9 +58,9 @@ const linkMatchRoute = index => {
   if (paths.value[index]?.indexOf('http') != -1) {
     // window.open(paths.value[index], '_blank')
   } else {
-    // const page = index == 0 ? '' : '/?page=' + paths.value[index]
-    // router.push(page)
-    router.push("/?page=" + paths.value[index]);
+    const page = index == 0 ? '' : '/?page=' + paths.value[index]
+    router.push(page)
+    // router.push("/?page=" + paths.value[index]);
   }
 }
 
@@ -92,6 +95,10 @@ const getData = async () => {
     links.value.push(item.title)
     paths.value.push(item.path)
   })
+
+  setTimeout(() => {
+    document.querySelector(".view").classList.remove("hide")
+  }, 8)
 }
 </script>
 
@@ -99,11 +106,12 @@ const getData = async () => {
 .view {
   position: relative;
   width: 100%;
+  height: 100%;
   background: #f8f9fb
     url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAXCAYAAADgKtSgAAAAAXNSR0IArs4c6QAAAFVJREFUSEtjfPn+238GJMDBxozMJZn949dfuB5GkOHiglyMJJtChIYhbPjHrz//83Oz0yZYRg3HlngYR4NlNFiIKFUgSkZTC9agGg0W7MEyWs1hCxcAF5pe5Ya82ZoAAAAASUVORK5CYII=)
     repeat center center/0.23rem 0.23rem;
 }
 .hide {
-  // visibility: hidden;
+  visibility: hidden;
 }
 </style>

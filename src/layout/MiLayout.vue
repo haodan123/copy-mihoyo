@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { usePageStore } from '@/stores/page'
+import { usePageStore } from '@/stores/index'
 import Swiper from 'swiper'
 
 import { onMounted, watch } from 'vue'
@@ -51,7 +51,8 @@ const init = () => {
       transitionEnd: () => {
         // 滑动后的事件
       },
-      slideChangeTransitionStart: () => {
+      slideChangeTransitionStart: (e) => {
+        // console.log(e,'打开');
         // 滑动前修改路由和 url
         let page = mySwiper.slides[mySwiper.activeIndex].children[0].classList[0].replace('home-', '') // 当前活跃页
         // console.log(page)
@@ -78,23 +79,27 @@ onMounted(() => {
  */
 
 const routeMatch = (speed = 0) => {
+  // console.log( mySwiper.slideTo);
   const query = route.query
+  // console.log(query)
   // 如果是首页
   if (query.page == undefined || query.page == '/' || query.page == '') {
     mySwiper.slideTo(0, speed) //轮播图滚动到索引0
   } else {
-    for (let i in mySwiper.slides) {
-      let { className } = mySwiper.slides[i].children[0]
-      // console.log(mySwiper.slides[i].children[0])
-      if (className.indexOf(query.page) !== -1) {
-        // console.log(i)
-        mySwiper.slideTo(i, speed) //轮播图滚动到对应索引
-        break  //因为会重复执行  不break就会重复调用
-      } else {
-        // 如果不是任何一个已有的页面, 跳转到首页
-        mySwiper.slideTo(0, speed) //轮播图滚动到索引0
-      }
-    }
+    // console.log(pageStore.pageIndex,);
+    // 方法一
+    mySwiper.slideTo(pageStore.pageIndex, speed)
+    // 方法二
+    // for (let i in mySwiper.slides) {
+    //   let { className } = mySwiper.slides[i].children[0]
+    //   if (className.indexOf(query.page) !== -1) {
+    //     mySwiper.slideTo(i, speed) //轮播图滚动到对应索引
+    //     break  //因为会重复执行  不break就会重复调用
+    //   } else {
+    //     // 如果不是任何一个已有的页面, 跳转到首页
+    //     mySwiper.slideTo(0, speed) //轮播图滚动到索引0
+    //   }
+    // }
   }
 }
 
@@ -113,7 +118,8 @@ watch(
   min-height: 720px;
   min-width: 1280px;
   overflow-y: auto;
-  height: 10.8rem;
+  height: 100%;
+  // height: 10.8rem;
 }
 .home {
   width: 100%;
@@ -155,6 +161,7 @@ watch(
 .swiper-wrapper {
   position: relative;
   width: 100%;
+// height: 100%;
   z-index: 1;
   display: flex;
   transition-property:
@@ -164,6 +171,6 @@ watch(
 }
 .swiper-slide-active {
   z-index: 99;
-  height: 746px;
+  // height: 746px;
 }
 </style>
